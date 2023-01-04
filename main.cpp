@@ -78,7 +78,7 @@ int main() {
     }
     addr += sizeof(int32_t);
   }
-  std::cout << tries << " memory addresses scanned before finding the right one" << std::endl;
+  std::cout << tries << std::endl;
   ptrace(PTRACE_DETACH, pid, NULL, NULL);
   return 0;
 }
