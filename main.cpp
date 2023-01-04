@@ -14,7 +14,10 @@
 
 #include <sys/types.h>
 
-const int TARGET_VALUE = 20;
+#include <limits>
+
+const int TARGET_VALUE = 100;
+const int AMMO_VALUE = 20;
 
 int main() {
   std::cout << "Written by anvsO1 (https://www.unknowncheats.me/forum/members/5175763.html)" << std::endl;
@@ -57,18 +60,24 @@ int main() {
   wait(NULL);
   std::cout << "waiting NULL" << std::endl;
   struct user_regs_struct regs;
-  long addr = 0x00000000;
-  std::cout << "testing for " << TARGET_VALUE << std::endl;
-  while (addr < 0xFFFFFFFF) {
-    ptrace(PTRACE_PEEKDATA, pid, addr, & regs);
-    int32_t value = *((int32_t *) &regs);
-    if (value == TARGET_VALUE) {
-    //if (regs.rax == TARGET_VALUE) {
-      std::cout << "Found target value at address: 0x" << std::hex << addr << std::endl;
-      break;
+
+  long addr = 0;
+  long int tries = 0;
+  while (addr < std::numeric_limits < long > ::max()) {
+    errno = 0;
+    long value = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
+    if (value == -1 && errno) {
+      tries++;
+    } else {
+      int32_t int_value = * ((int32_t * ) & value);
+      if (int_value == TARGET_VALUE) {
+        std::cout << "Found target value at address: 0x" << std::hex << addr << std::endl;
+        break;
+      }
     }
     addr += sizeof(int32_t);
   }
+  std::cout << tries << " memory addresses scanned before finding the right one" << std::endl;
   ptrace(PTRACE_DETACH, pid, NULL, NULL);
   return 0;
 }
