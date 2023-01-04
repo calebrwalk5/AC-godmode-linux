@@ -63,6 +63,7 @@ int main() {
 
   long addr = 0;
   long int tries = 0;
+  std::cout << "we're gonna scan all of virtual memory, this will take some time" << std::endl;
   while (addr < std::numeric_limits < long > ::max()) {
     errno = 0;
     long value = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
