@@ -17,7 +17,6 @@
 #include <limits>
 
 const int TARGET_VALUE = 100;
-const int AMMO_VALUE = 20;
 
 int main() {
   std::cout << "Written by anvsO1 (https://www.unknowncheats.me/forum/members/5175763.html)" << std::endl;
