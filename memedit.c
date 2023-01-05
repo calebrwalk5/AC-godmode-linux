@@ -16,14 +16,10 @@ int main(int argc, char * argv[]) {
     printf("Invalid address: %s\n", argv[1]);
     return 1;
   }
-
-  int value = atoi(argv[2]);
-
-  int * ptr = (int * ) address;
-
-  * ptr = value;
-
-  printf("Value %d assigned to address 0x%lx\n", value, address);
-
+  for(;;) {
+    int value = atoi(argv[2]);
+    int * ptr = (int * ) address;
+    * ptr = value;
+  }
   return 0;
 }
