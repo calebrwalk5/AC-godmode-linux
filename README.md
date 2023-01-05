@@ -1,2 +1,5 @@
 # AC-godmode-linux
-assaultcube godmode on linux. work in progress
+assaultcube godmode on linux<br>
+## How to run
+`bash build.sh`<br>
+`./main`<br>
