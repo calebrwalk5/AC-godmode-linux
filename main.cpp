@@ -20,6 +20,12 @@
 
 #include <vector>
 
+#include <cstdio>
+
+#include <cstdlib>
+
+#include <unistd.h>
+
 constexpr int TARGET_VALUE = 100;
 
 // Struct to represent a range of memory addresses
@@ -116,7 +122,8 @@ int main() {
     for (long addr = range.start_addr; addr < range.end_addr; addr += sizeof(long)) {
       long data = loadMemory(pid, addr);
       if (data == TARGET_VALUE) {
-        std::cout << "Found target value at address " << std::hex << addr << std::dec << std::endl;
+        std::cout << "Found " << TARGET_VALUE << " at " << std::hex << addr << std::dec << std::endl;
+        system(("sudo ./memedit " + std::to_string(addr) + " " + std::to_string(TARGET_VALUE)).c_str());
         break;
       }
     }

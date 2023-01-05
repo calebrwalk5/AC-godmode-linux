@@ -20,3 +20,4 @@ fi
 
 sudo sysctl kernel.yama.ptrace_scope=0
 g++ main.cpp -o main
+gcc memedit.c -o memedit
