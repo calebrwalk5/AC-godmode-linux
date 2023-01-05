@@ -16,7 +16,7 @@
 
 #include <limits>
 
-const int TARGET_VALUE = 100;
+constexpr int TARGET_VALUE = 100;
 
 int main() {
   std::cout << "Written by anvsO1 (https://www.unknowncheats.me/forum/members/5175763.html)" << std::endl;
@@ -63,21 +63,27 @@ int main() {
   long addr = 0;
   long int tries = 0;
   std::cout << "we're gonna scan all of virtual memory, this will take some time" << std::endl;
-  while (addr < std::numeric_limits < long > ::max()) {
-    errno = 0;
-    long value = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
-    if (value == -1 && errno) {
-      tries++;
-    } else {
-      int32_t int_value = * ((int32_t * ) & value);
-      if (int_value == TARGET_VALUE) {
-        std::cout << "Found target value at address: 0x" << std::hex << addr << std::endl;
-        break;
-      }
-    }
-    addr += sizeof(int32_t);
-  }
-  std::cout << tries << std::endl;
+  // Stuff for assembly
+  const char message[] = "Done searching\n";
+  int edi = 0;
+  int esi = 0x7fffffff;
+  int ecx = TARGET_VALUE;
+  int edx = 0;
+  int eax = 0;
+  int ebx = 1;
+  // Assembly
+  __asm__(
+    "movl %0, %%edi \n"
+    "movl %1, %%esi \n"
+    "mov %2, %%ecx \n"
+    "movl %3, %%edx \n"
+    "movl %4, %%eax \n"
+    // Helped
+    : // Output operands (none)
+    : "m"(edi), "m"(esi), "r"(TARGET_VALUE), "m"(ecx), "m"(edx), "m"(eax), "m"(ebx), "r"(message) // Input operands
+    : "memory" // Clobbered registers
+  );
+
   ptrace(PTRACE_DETACH, pid, NULL, NULL);
   return 0;
 }
