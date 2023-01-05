@@ -1,12 +1,21 @@
 #include <iostream>
+
 #include <stdio.h>
+
 #include <string.h>
+
 #include <unistd.h>
+
 #include <sys/ptrace.h>
+
 #include <sys/wait.h>
+
 #include <sys/user.h>
+
 #include <sys/types.h>
+
 #include <limits>
+
 #include <cmath>  // for ceil function
 
 constexpr int TARGET_VALUE = 100;
@@ -60,7 +69,7 @@ int main() {
     return 1;
   }
   // Attach to the ac_client process
-    if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
+  if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
     perror("ptrace attach");
     return 1;
   }
@@ -74,16 +83,16 @@ int main() {
   // Search virtual memory for TARGET_VALUE
   bool found = false;
   long data = 0;
-  long total_memory = std::numeric_limits<long>::max();  // total amount of virtual memory to scan
-  long memory_scanned = 0;  // amount of virtual memory scanned so far
-  int loading_bar_size = 50;  // number of characters in the loading bar
+  long total_memory = std::numeric_limits < long > ::max(); // total amount of virtual memory to scan
+  long memory_scanned = 0; // amount of virtual memory scanned so far
+  int loading_bar_size = 50; // number of characters in the loading bar
   while (addr < total_memory) {
     data = loadMemory(pid, addr);
     if (data == -1) {
       found = false;
     }
     for (int i = 0; i < sizeof(long); i++) {
-      if (((char*)&data)[i] == TARGET_VALUE) {
+      if (((char * ) & data)[i] == TARGET_VALUE) {
         std::cout << "Found target value at address: " << addr + i << std::endl;
         found = true;
       }
@@ -92,7 +101,7 @@ int main() {
     memory_scanned += sizeof(long);
 
     // Update the loading bar
-    int num_bars = std::ceil((double)memory_scanned / total_memory * loading_bar_size);
+    int num_bars = std::ceil((double) memory_scanned / total_memory * loading_bar_size);
     std::cout << "[";
     for (int i = 0; i < num_bars; i++) {
       std::cout << "=";
@@ -100,10 +109,10 @@ int main() {
     for (int i = 0; i < loading_bar_size - num_bars; i++) {
       std::cout << " ";
     }
-    std::cout << "] " << memory_scanned << " / " << total_memory << "\r";
+    std::cout << "] " << memory_scanned << " / " << total_memory << "  " << memory_scanned / total_memory << "%" << "\r";
     std::cout.flush();
   }
-  std::cout << std::endl;  // move to the next line after printing the loading bar
+  std::cout << std::endl; // move to the next line after printing the loading bar
   if (found == false) {
     std::cout << "Could not find target value in virtual memory" << std::endl;
   }
