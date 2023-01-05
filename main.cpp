@@ -18,8 +18,14 @@
 
 constexpr int TARGET_VALUE = 100;
 
+long loadMemory(pid_t pid, long addr) {
+  std::cout << "Loading memory" << std::endl;
+  long data = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
+  return data;
+}
 int main() {
   std::cout << "Written by anvsO1 (https://www.unknowncheats.me/forum/members/5175763.html)" << std::endl;
+
   // Get the window ID of the Assault Cube window
   char buf[256];
   FILE * xdotool = popen("xdotool search --name 'AssaultCube'", "r");
@@ -63,27 +69,29 @@ int main() {
   long addr = 0;
   long int tries = 0;
   std::cout << "we're gonna scan all of virtual memory, this will take some time" << std::endl;
-  // Stuff for assembly
-  const char message[] = "Done searching\n";
-  int edi = 0;
-  int esi = 0x7fffffff;
-  int ecx = TARGET_VALUE;
-  int edx = 0;
-  int eax = 0;
-  int ebx = 1;
-  // Assembly
-  __asm__(
-    "movl %0, %%edi \n"
-    "movl %1, %%esi \n"
-    "mov %2, %%ecx \n"
-    "movl %3, %%edx \n"
-    "movl %4, %%eax \n"
-    // Helped
-    : // Output operands (none)
-    : "m"(edi), "m"(esi), "r"(TARGET_VALUE), "m"(ecx), "m"(edx), "m"(eax), "m"(ebx), "r"(message) // Input operands
-    : "memory" // Clobbered registers
-  );
+  // Search virtual memory for TARGET_VALUE
+  bool found = base;
+  long data = 0;
+  while (addr < std::numeric_limits < long > ::max()) {
+    data = loadMemory(pid, addr);
+    if (data == -1) {
+      break;
+      std::cout << "error loading memory\n";
+    }
+    for (int i = 0; i < sizeof(long); i++) {
+      if (((char * ) & data)[i] == TARGET_VALUE) {
+        std::cout << "Found target value at address: " << addr + i << std::endl;
+        found = true;
+      }
+    }
+    addr += sizeof(long);
+  }
 
+  if (!found) {
+    std::cout << "Could not find target value in virtual memory" << std::endl;
+  }
+
+  // Detach from the process
   ptrace(PTRACE_DETACH, pid, NULL, NULL);
   return 0;
 }
