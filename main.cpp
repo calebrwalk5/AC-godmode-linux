@@ -21,8 +21,18 @@
 constexpr int TARGET_VALUE = 100;
 
 long loadMemory(pid_t pid, long addr) {
-  long data = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
-  return data;
+    long data;
+    __asm__ __volatile__ (
+        "mov $0, %%rax\n"
+        "mov %1, %%rdi\n"
+        "mov %2, %%rsi\n"
+        "mov %3, %%rdx\n"
+        "syscall"
+        : "=r" (data)  // output
+        : "r" (pid), "rm" (addr), "r" (NULL), "r" (PTRACE_PEEKDATA)  // input
+        : "%rdi", "%rsi", "%rdx", "%rax"  // clobbered registers
+    );
+    return data;
 }
 
 int main() {
