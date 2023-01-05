@@ -7,6 +7,7 @@
 #include <sys/user.h>
 #include <sys/types.h>
 #include <limits>
+#include <cmath>  // for ceil function
 
 constexpr int TARGET_VALUE = 100;
 
@@ -14,6 +15,7 @@ long loadMemory(pid_t pid, long addr) {
   long data = ptrace(PTRACE_PEEKDATA, pid, addr, NULL);
   return data;
 }
+
 int main() {
   std::cout << "Written by anvsO1 (https://www.unknowncheats.me/forum/members/5175763.html)" << std::endl;
 
@@ -57,8 +59,8 @@ int main() {
     std::cout << "atoi failed to parse PID" << std::endl;
     return 1;
   }
-    // Attach to the ac_client process
-  if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
+  // Attach to the ac_client process
+    if (ptrace(PTRACE_ATTACH, pid, NULL, NULL) == -1) {
     perror("ptrace attach");
     return 1;
   }
@@ -70,28 +72,42 @@ int main() {
   long int tries = 0;
   std::cout << "we're gonna scan all of virtual memory, this will take some time" << std::endl;
   // Search virtual memory for TARGET_VALUE
-  bool found = NULL;
+  bool found = false;
   long data = 0;
-  while (addr < std::numeric_limits < long > ::max()) {
+  long total_memory = std::numeric_limits<long>::max();  // total amount of virtual memory to scan
+  long memory_scanned = 0;  // amount of virtual memory scanned so far
+  int loading_bar_size = 50;  // number of characters in the loading bar
+  while (addr < total_memory) {
     data = loadMemory(pid, addr);
     if (data == -1) {
       found = false;
     }
     for (int i = 0; i < sizeof(long); i++) {
-      if (((char * ) & data)[i] == TARGET_VALUE) {
+      if (((char*)&data)[i] == TARGET_VALUE) {
         std::cout << "Found target value at address: " << addr + i << std::endl;
         found = true;
       }
     }
     addr += sizeof(long);
+    memory_scanned += sizeof(long);
+
+    // Update the loading bar
+    int num_bars = std::ceil((double)memory_scanned / total_memory * loading_bar_size);
+    std::cout << "[";
+    for (int i = 0; i < num_bars; i++) {
+      std::cout << "=";
+    }
+    for (int i = 0; i < loading_bar_size - num_bars; i++) {
+      std::cout << " ";
+    }
+    std::cout << "] " << memory_scanned << " / " << total_memory << "\r";
+    std::cout.flush();
   }
-  if (found = false) {
-    std::cout << "Could not find target value " << TARGET_VALUE << " in virtual memory" << std::endl;
+  std::cout << std::endl;  // move to the next line after printing the loading bar
+  if (found == false) {
+    std::cout << "Could not find target value in virtual memory" << std::endl;
   }
-  if (found = NULL) {
-    std::cout << "found = NULL" << std::endl;
-  }
-  // Detach from the process
+
   ptrace(PTRACE_DETACH, pid, NULL, NULL);
   return 0;
 }
