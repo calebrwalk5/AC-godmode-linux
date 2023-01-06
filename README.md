@@ -1,6 +1,6 @@
 ![cat](./github/cat.png)
 # AC-godmode-linux
-assaultcube godmode on linux<br>
+AssaultCube godmode on Linux<br>
 ## How to run
 `bash build.sh`<br>
 `./main`<br>
