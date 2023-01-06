@@ -1,4 +1,4 @@
-# AC-godmode-linux
+<img src="./.github/cat.png /># AC-godmode-linux
 assaultcube godmode on linux<br>
 ## How to run
 `bash build.sh`<br>
