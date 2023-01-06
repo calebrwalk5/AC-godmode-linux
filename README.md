@@ -5,3 +5,5 @@ assaultcube godmode on linux<br>
 `./main`<br>
 # Note
 If it seg faults you don't have permissions to write to the memory address
+# Thank you
+https://github.com/neg4n/tr<br>
