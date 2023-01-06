@@ -4,7 +4,7 @@ assaultcube godmode on linux<br>
 `bash build.sh`<br>
 `./main`<br>
 # Note
-If it seg faults you don't have permissions to write to the memory address
+You need cargo, g++, and xdotool
 # Thank you
 https://github.com/neg4n/tr<br>
 https://blush.design/artists/dzLHsXCPZMaj1QgNySgN/mariana-gonzalez<br>
