@@ -7,3 +7,4 @@ assaultcube godmode on linux<br>
 If it seg faults you don't have permissions to write to the memory address
 # Thank you
 https://github.com/neg4n/tr<br>
+https://blush.design/artists/dzLHsXCPZMaj1QgNySgN/mariana-gonzalez<br>
