@@ -1,0 +1,10 @@
+[package]
+name = "memedit"
+description = "edit memory for AC-godmode-linux [trickster]"
+version = "0.0.1"
+authors = ["anvsO1 <https://www.unknowncheats.me/forum/members/5175763.html>"]
+
+[dependencies]
+trickster = { path = "./include/trickster" }
+endianness = "0.2"
+byteorder = "1.3.4"

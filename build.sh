@@ -19,5 +19,5 @@ else
 fi
 
 sudo sysctl kernel.yama.ptrace_scope=0
-g++ main.cpp -o main
-gcc memedit.c -o memedit
+g++ ./src/main.cpp -o main
+cargo build --target-dir=./src
