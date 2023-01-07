@@ -1,26 +1,26 @@
 extern crate trickster;
 extern crate endianness;
 extern crate byteorder;
-//use endianness::LittleEndian;
 use byteorder::{ByteOrder, LittleEndian};
 use endianness::{read_i32};
 use trickster::Process;
 use std::env;
 use std::error::Error;
-// use std::io::Read;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Get command line arguments
     let args: Vec<String> = env::args().collect();
-    if args.len() != 3 {
+    if args.len() != 4 {
         println!("Usage: program <memory_address> <value>");
         return Ok(());
     }
 
     let memory_address: usize = args[1].parse().unwrap();
     let value: i32 = args[2].parse().unwrap();
+    let pid: i32 = args[3].parse().unwrap();
 
-    let ctx = Process::new("rw_memory_ex")?;
+    let pid_str = pid.to_string();
+    let ctx = Process::new(&pid_str)?;
 
     println!();
 

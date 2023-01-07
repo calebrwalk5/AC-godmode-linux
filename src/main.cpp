@@ -123,7 +123,8 @@ int main() {
       long data = loadMemory(pid, addr);
       if (data == TARGET_VALUE) {
         std::cout << "Found " << TARGET_VALUE << " at " << std::hex << addr << std::dec << std::endl;
-        system(("sudo ./src/debug/memedit " + std::to_string(addr) + " " + std::to_string(TARGET_VALUE)).c_str());
+        system("sudo chmod u+x /proc " + pid);
+        system(("sudo ./src/debug/memedit " + std::to_string(addr) + " " + std::to_string(TARGET_VALUE) + " " + std::to_string(pid)).c_str());
         break;
       }
     }
